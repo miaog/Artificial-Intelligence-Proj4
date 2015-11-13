@@ -20,8 +20,8 @@
 # value iteration.
 
 def question2():
-    answerDiscount = None
-    answerNoise = None
+    answerDiscount = 0.9
+    answerNoise = -1
     return answerDiscount, answerNoise
 
 def question3a():
