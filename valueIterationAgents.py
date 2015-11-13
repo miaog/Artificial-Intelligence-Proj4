@@ -53,10 +53,8 @@ class AsynchronousValueIterationAgent(ValueEstimationAgent):
         global num
         num = 0
         while num < self.iterations:
-          # print i
           for state in states:
             if num < self.iterations:
-              # print num
               if self.mdp.isTerminal(state):
                 self.values[state] = 0
                 num = num + 1
@@ -66,12 +64,8 @@ class AsynchronousValueIterationAgent(ValueEstimationAgent):
                 a = self.computeQValueFromValues(state, action)
                 if a > current:
                   current = a
-                # print current
               self.values[state] = current
-              # print self.values[state]
-              # print num
             num += 1
-            # print self.iterations
 
     def getValue(self, state):
         """
@@ -87,7 +81,7 @@ class AsynchronousValueIterationAgent(ValueEstimationAgent):
         value = 0
         for nextState, probability in self.mdp.getTransitionStatesAndProbs(state, action):
           # print self.mdp.getReward(state)
-          value += probability * (self.mdp.getReward(state)) + (self.discount * self.values[nextState])
+          value += probability * (self.mdp.getReward(state) + (self.discount * self.values[nextState]))
         return value
 
     def computeActionFromValues(self, state):
