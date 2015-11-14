@@ -156,7 +156,6 @@ class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
 
 
         pq = util.PriorityQueue()
-        # pqDict = {}
 
         for state in states:
           if self.mdp.isTerminal(state) == False:
@@ -169,14 +168,11 @@ class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
 
             diff = abs(self.values[state] - maxValue)
             pq.push(state, -diff)
-            # pqDict[state] = -diff
-
 
         for i in range(self.iterations):
 
           if pq.isEmpty() == False:
             poppedState = pq.pop()
-            # del pqDict[poppedState]
             if self.mdp.isTerminal(poppedState) == False:
 
               maxValue = -1*float('inf')
@@ -187,27 +183,15 @@ class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
 
               self.values[poppedState] = maxValue
 
-            for predecessor in predecessors[poppedState]:
+              for predecessor in predecessors[poppedState]:
 
-              maxValue = -1*float('inf')
-              for action in self.mdp.getPossibleActions(predecessor):
-                qVal = self.computeQValueFromValues(predecessor, action)
-                if qVal > maxValue:
-                  maxValue = qVal
+                maxValue = -1*float('inf')
+                for action in self.mdp.getPossibleActions(predecessor):
+                  qVal = self.computeQValueFromValues(predecessor, action)
+                  if qVal > maxValue:
+                    maxValue = qVal
 
-              diff = abs(self.values[predecessor] - maxValue)
+                diff = abs(self.values[predecessor] - maxValue)
 
-              if diff > theta:
-                # if predecessor not in pqDict:
-                pq.push(predecessor, -diff)
-                #   pqDict[predecessor] = -diff
-                # else:
-                #   if pqDict[predecessor] > -diff:
-                #     pq.push(predecessor, -diff)
-                #     pqDict[predecessor] = -diff
-
-                
-
-
-
-      
+                if diff > theta:
+                  pq.update(predecessor, -diff)
