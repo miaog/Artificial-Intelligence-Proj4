@@ -63,9 +63,9 @@ def question5():
     return 0, 0, 0, 0, 0, 0
 
 def question9():
-    answerEpsilon = None
-    answerLearningRate = None
-    return answerEpsilon, answerLearningRate
+    answerEpsilon = 0.1
+    answerLearningRate = 0.9
+    return 'NOT POSSIBLE'
     # If not possible, return 'NOT POSSIBLE'
 
 if __name__ == '__main__':
