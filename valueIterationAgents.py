@@ -139,4 +139,75 @@ class PrioritizedSweepingValueIterationAgent(AsynchronousValueIterationAgent):
         for state in states:
             self.values[state] = 0
 
-        "*** YOUR CODE HERE ***"
+        #### Compute the predessors for each state
+        #### state ----> set of that state's predecessors
+        predecessors = {}
+
+        for state in states:
+          predecessors[state] = set()
+
+        for state in states:
+          if self.mdp.isTerminal(state) == False:
+            actions = self.mdp.getPossibleActions(state)
+            for action in actions:
+              for nextState, probability in self.mdp.getTransitionStatesAndProbs(state, action):
+                if probability > 0:
+                  predecessors[nextState].add(state)
+
+
+        pq = util.PriorityQueue()
+        # pqDict = {}
+
+        for state in states:
+          if self.mdp.isTerminal(state) == False:
+
+            maxValue = -1*float('inf')
+            for action in self.mdp.getPossibleActions(state):
+              qVal = self.computeQValueFromValues(state, action)
+              if qVal > maxValue:
+                maxValue = qVal
+
+            diff = abs(self.values[state] - maxValue)
+            pq.push(state, -diff)
+            # pqDict[state] = -diff
+
+
+        for i in range(self.iterations):
+
+          if pq.isEmpty() == False:
+            poppedState = pq.pop()
+            # del pqDict[poppedState]
+            if self.mdp.isTerminal(poppedState) == False:
+
+              maxValue = -1*float('inf')
+              for action in self.mdp.getPossibleActions(poppedState):
+                qVal = self.computeQValueFromValues(poppedState, action)
+                if qVal > maxValue:
+                  maxValue = qVal
+
+              self.values[poppedState] = maxValue
+
+            for predecessor in predecessors[poppedState]:
+
+              maxValue = -1*float('inf')
+              for action in self.mdp.getPossibleActions(predecessor):
+                qVal = self.computeQValueFromValues(predecessor, action)
+                if qVal > maxValue:
+                  maxValue = qVal
+
+              diff = abs(self.values[predecessor] - maxValue)
+
+              if diff > theta:
+                # if predecessor not in pqDict:
+                pq.push(predecessor, -diff)
+                #   pqDict[predecessor] = -diff
+                # else:
+                #   if pqDict[predecessor] > -diff:
+                #     pq.push(predecessor, -diff)
+                #     pqDict[predecessor] = -diff
+
+                
+
+
+
+      
