@@ -1,2 +1,2 @@
 # Reinforcement-Learning
-Pacman agent will logically plan his way to the goal
+Implementation of value iteration, policy iteration, and Q-learning on Pacman agents
